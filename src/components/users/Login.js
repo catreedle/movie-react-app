@@ -25,17 +25,18 @@ function Login() {
       
     const handleSubmit = (event) => {
         event.preventDefault()
+        let request = {"auth": {"email": email, "password": password}}
 
-        fetch('https://test-binar.herokuapp.com/auth/login', {
+        fetch(`${process.env.REACT_APP_BASE_URL}user_token`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify(request)
         }).then(response => response.json())
             .then((data) => {
-                if (data.result) {
-                    sessionStorage.setItem('token', data.result.access_token)
+                if (data) {
+                    localStorage.setItem('token', data.jwt)
                     setRedirect(true)
                 } else {
                     setPassword('')

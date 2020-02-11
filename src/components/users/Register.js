@@ -10,7 +10,6 @@ function Register() {
     const [visible, setVisible] = useState(false)
     const [message, setMessage] = useState('')
     const [color, setColor] = useState("info")
-    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const AlertRegister = (props) => {
@@ -26,15 +25,12 @@ function Register() {
     
     const handleSubmit = (event) => {
         event.preventDefault()
-
-        fetch('https://test-binar.herokuapp.com/auth/signup', {
+        fetch(`${process.env.REACT_APP_BASE_URL}users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: JSON.stringify({
-                name, email, password
-            })
+            body: JSON.stringify({email, password})
         }).then(response => response.json())
             .then((data) => {
                 if (data.result) {
@@ -44,10 +40,9 @@ function Register() {
                 } else {
                     setVisible(true)
                     setColor("danger")
-                    setMessage(data.errors.email[0])
+                    setMessage('Fail to log in!')
                 }
             }).then(() => {
-                setName('')
                 setEmail('')
                 setPassword('')
             })
@@ -59,16 +54,6 @@ function Register() {
                 <h1>Register</h1>
                 <Container style={FormStyle}>
                 <Form onSubmit={handleSubmit}>
-                    <FormGroup>
-                        <Input
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            name="name"
-                            type="text"
-                            placeholder="Name"
-                            required
-                        />
-                    </FormGroup>
                     <FormGroup>
                         <Input
                             value={email}
