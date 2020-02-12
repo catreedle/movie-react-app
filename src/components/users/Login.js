@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Redirect } from 'react-router-dom'
 import { Alert, Button, Container, Form, FormGroup, Input } from 'reactstrap'
+import { API_URL } from "../../config"
 
 function Login() {
     const FormStyle = {
@@ -15,33 +16,40 @@ function Login() {
     const AlertLogin = (props) => {
         props = [visible, setVisible]
         const onDismiss = () => setVisible(false);
-      
+
         return (
-          <Alert color="danger" isOpen={visible} toggle={onDismiss}>
-            Wrong password or user not found!
+            <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+                Wrong password or user not found!
           </Alert>
         );
-      }
-      
+    }
+
+    const handleResponse = res => {
+        if (res.ok) {
+            return res.json()
+        } else {
+            setPassword('')
+            setVisible(true)
+            throw new Error('Network response was not ok.')
+        }
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
-        let request = {"auth": {"email": email, "password": password}}
+        let request = { "auth": { "email": email, "password": password } }
 
-        fetch(`${process.env.REACT_APP_BASE_URL}user_token`, {
+        fetch(`${API_URL}user_token`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(request)
-        }).then(response => response.json())
+        }).then(handleResponse)
             .then((data) => {
-                if (data) {
-                    localStorage.setItem('token', data.jwt)
-                    setRedirect(true)
-                } else {
-                    setPassword('')
-                    setVisible(true)
-                }
+                localStorage.setItem('token', data.jwt)
+                setRedirect(true)
+            }).catch((error) => {
+                console.log(error)
             })
     }
 

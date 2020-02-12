@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Button, Form, FormGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, NavLink } from 'reactstrap';
+import { API_URL } from "../../config";
 
 const CreateMovie = () => {
     const [visible, setVisible] = useState(false)
@@ -27,7 +28,7 @@ const CreateMovie = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
 
-        fetch(`${process.env.REACT_APP_BASE_URL}movies`, {
+        fetch(`${API_URL}movies`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

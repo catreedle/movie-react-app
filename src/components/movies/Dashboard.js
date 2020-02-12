@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { API_URL } from "../../config"
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import "./Dashboard.css";
 import CreateMovie from './CreateMovie'
@@ -11,14 +12,30 @@ import SearchBar from '../elements/SearchBar/SearchBar'
 
 const Dashboard = (props) => {
     const [movies, setMovies] = useState([])
+    const [isAdmin, setIsAdmin] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [loading, setLoading] = useState(false)
 
     const handleLogout = () => {
-        sessionStorage.clear()
+        localStorage.clear()
     }
+
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_BASE_URL}movies`, {
+        fetch(`${API_URL}admin`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        }).then(response => response.json())
+            .then((data) => {
+                if (data) {
+                    setIsAdmin(data)
+                }
+            })
+            .catch((error) => (console.log(error)))
+
+        fetch(`${API_URL}movies`, {
             method: 'GET',
         }).then(response => response.json())
             .then((data) => {
@@ -37,9 +54,9 @@ const Dashboard = (props) => {
         setSearchTerm(searchTerm);
 
         if (searchTerm === "") {
-            endpoint = `${process.env.REACT_APP_BASE_URL}movies`;
+            endpoint = `${API_URL}movies`;
         } else {
-            endpoint = `${process.env.REACT_APP_BASE_URL}title/${searchTerm}`;
+            endpoint = `${API_URL}title/${searchTerm}`;
         }
         fetch(endpoint, {
             method: 'GET',
@@ -63,8 +80,8 @@ const Dashboard = (props) => {
         movies.map((movie, i) => {
             return (
                 <div key={i}>
-                    <DeleteMovie id={movie.id} title={movie.title} />
-                    <EditMovie id={movie.id} />
+                    { isAdmin && <DeleteMovie id={movie.id} title={movie.title} />}
+                    { isAdmin &&<EditMovie id={movie.id} /> }
                     <MovieThumb
                         clickable={true}
                         image={
@@ -83,9 +100,9 @@ const Dashboard = (props) => {
         <div className="rmdb-home">
             <Navbar expand="md">
                 <Nav className="mr-auto" navbar>
-                    <NavbarBrand>Movie List</NavbarBrand>
+                    <NavbarBrand href="/dashboard">Moviey</NavbarBrand>
                     <NavItem>
-                        <CreateMovie />
+                        {isAdmin && <CreateMovie />}
                     </NavItem>
                 </Nav>
                 <Nav>

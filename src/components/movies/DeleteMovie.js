@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { API_URL } from "../../config"
 
 const DeleteMovie = (props) => {
     const [modal, setModal] = useState(false)
@@ -7,7 +8,7 @@ const DeleteMovie = (props) => {
     const handleDelete = (event) => {
         event.preventDefault()
 
-        fetch(`${process.env.REACT_APP_BASE_URL}movies/${props.id}`, {
+        fetch(`${API_URL}movies/${props.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,7 +29,7 @@ const DeleteMovie = (props) => {
 
     return (
         <div>
-            <span onClick={toggle} style={{cursor: 'pointer', float: 'right', fontSize: '35px', margin: '5px'}}><i className="fa fa-trash"></i></span>
+            <span onClick={toggle} style={{cursor: 'pointer', float: 'right', fontSize: '35px', margin: '5px', color: 'white'}}><i className="fa fa-trash"></i></span>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalBody>
                     Are you sure you want to delete<br></br>

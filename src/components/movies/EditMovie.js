@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, FormGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, NavLink } from 'reactstrap';
+import { API_URL } from "../../config";
 
 const EditMovie = (props) => {
     const [modal, setModal] = useState(false);
@@ -15,7 +16,7 @@ const EditMovie = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault()
 
-        fetch(`${process.env.REACT_APP_BASE_URL}movies/${props.id}`, {
+        fetch(`${API_URL}movies/${props.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ const EditMovie = (props) => {
     }
     useEffect(() => {
         if (sendRequest) {
-            fetch(`${process.env.REACT_APP_BASE_URL}movies/${props.id}`, {
+            fetch(`${API_URL}movies/${props.id}`, {
                 method: 'GET',
             }).then(response => response.json())
                 .then((data) => {
@@ -55,9 +56,9 @@ const EditMovie = (props) => {
     }, [sendRequest])
     return (
         <div>
-            <span onClick={toggle} style={{ cursor: 'pointer', float: 'right', fontSize: '35px', margin: '5px' }}><i style={{ float: 'right', fontSize: '35px', margin: '5px' }} className="fa fa-edit"></i></span>
+            <span onClick={toggle} style={{ cursor: 'pointer', float: 'right', fontSize: '35px', color: 'white', margin: '5px' }}><i style={{ float: 'right', fontSize: '35px', margin: '5px' }} className="fa fa-edit"></i></span>
             <Modal isOpen={modal} toggle={toggle} >
-                <ModalHeader toggle={toggle}>Edit Product</ModalHeader>
+                <ModalHeader toggle={toggle}>Edit Movie</ModalHeader>
                 <ModalBody>
                 <Form>
                         <FormGroup>
