@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom"
 import Login from "./components/users/Login"
 import Register from "./components/users/Register"
 import Dashboard from "./components/movies/Dashboard"
+import FavoriteMovies from "./components/movies/FavoriteMovie"
 import Movie from "./components/movies/movie/Movie"
 
 import './App.css';
@@ -15,6 +16,7 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/favorites" component={FavoriteMovies} />
           <Route path="/:movieId" component={Movie} />
         </Switch>
       </div>

@@ -88,6 +88,12 @@
   margin-top: 20px;
 }
 
+.heart-icon {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+}
+
 .fa-eye {
   position: absolute;
   bottom: 40px;

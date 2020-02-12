@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Nav, Navbar, NavbarBrand } from 'reactstrap';
 import { API_URL } from "../../../config";
+import NavBar from '../../elements/NavBar/NavBar';
 import MovieThumb from "../../elements/MovieThumb/MovieThumb"
 import "./Movie.css"
 import FontAwesome from 'react-fontawesome';
+import HeartCheckbox from 'react-heart-checkbox';
 
 class Movie extends Component {
     state = {
@@ -15,7 +16,8 @@ class Movie extends Component {
         image: '',
         genre: '',
         summary: '',
-        visit_counter: 0
+        visit_counter: 0,
+        checked: false
     }
 
     componentDidMount() {
@@ -39,17 +41,49 @@ class Movie extends Component {
             .catch((error) => {
                 console.log(error)
             })
+
+        fetch(`${API_URL}favorites/${this.props.match.params.movieId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        }).then(response => response.json())
+            .then((data) => {
+                if (data) {
+                    this.setState({
+                        checked: data
+                    })
+                }
+            })
+            .catch((error) => (console.log(error)))
+    }
+
+    onClick = () => {
+        this.setState({ checked: !this.state.checked });
+        if (!this.state.checked) {
+            fetch(`${API_URL}favorites/${this.props.match.params.movieId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            }).catch((error) => console.log(error))
+        } else {
+            fetch(`${API_URL}favorites/${this.props.match.params.movieId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            }).catch((error) => console.log(error))
+        }
     }
 
     render() {
         return (
             <div>
-                <Navbar expand="md">
-                    <Nav className="mr-auto" navbar>
-                        <NavbarBrand href="/dashboard">Moviey</NavbarBrand>
-                    </Nav>
-                </Navbar>
-                <hr></hr>
+                <NavBar />
                 <div className="rmdb-movieinfo">
                     <div className="rmdb-movieinfo-content">
                         <div className="rmdb-movieinfo-thumb">
@@ -62,14 +96,18 @@ class Movie extends Component {
                                 clickable={false}
                             />
                         </div>
+
                         <div className="rmdb-movieinfo-text">
                             <h1>{this.state.title}</h1>
                             <h3>SUMMARY</h3>
                             <p>{this.state.summary}</p>
                         </div>
+                        <div className="heart-icon">
+                            <HeartCheckbox checked={this.state.checked} onClick={this.onClick} />
+                        </div>
                         <FontAwesome className="fa-eye" name="eye" size="5x" />
                         <p className="fa-text">Seen {this.state.visit_counter}</p>
-                        
+
                     </div>
                     <div className="rmdb-movieinfo-cast">
                         <h3>CASTS</h3>

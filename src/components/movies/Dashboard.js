@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { API_URL } from "../../config"
-import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import "./Dashboard.css";
-import CreateMovie from './CreateMovie'
+import NavBar from '../elements/NavBar/NavBar';
 import DeleteMovie from './DeleteMovie';
 import EditMovie from './EditMovie';
 
@@ -15,10 +14,6 @@ const Dashboard = (props) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [searchTerm, setSearchTerm] = useState("")
     const [loading, setLoading] = useState(false)
-
-    const handleLogout = () => {
-        localStorage.clear()
-    }
 
     useEffect(() => {
         fetch(`${API_URL}admin`, {
@@ -98,18 +93,7 @@ const Dashboard = (props) => {
 
     return (
         <div className="rmdb-home">
-            <Navbar expand="md">
-                <Nav className="mr-auto" navbar>
-                    <NavbarBrand href="/dashboard">Moviey</NavbarBrand>
-                    <NavItem>
-                        {isAdmin && <CreateMovie />}
-                    </NavItem>
-                </Nav>
-                <Nav>
-                    <NavLink href="/" onClick={handleLogout}>Logout</NavLink>
-                </Nav>
-            </Navbar>
-            <hr></hr>
+            <NavBar isAdmin={isAdmin} />
             <SearchBar callback={searchItems} />
             <div className="rmdb-home-grid">
                 <FourColGrid
