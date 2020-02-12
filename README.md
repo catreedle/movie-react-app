@@ -58,3 +58,10 @@ docker-compose up
 ```
 docker-compose stop
 ```
+## Related API
+
+You can find the repository for the API app related to this project on [https://github.com/catreedle/my-movie-api](https://github.com/catreedle/my-movie-api)
+
+### Documentation
+
+API documentation available at [https://documenter.getpostman.com/view/8712628/SWTK4Dz2](https://documenter.getpostman.com/view/8712628/SWTK4Dz2).
